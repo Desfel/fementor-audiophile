@@ -2,9 +2,17 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Head from 'vue-head'
 import Home from '@/views/Home'
-import CheckLogin from '@/views/CheckLogin'
 import { isNil } from 'lodash'
 import store from '@/store'
+import Headphones from '@/views/Headphones'
+import Speakers from "@/views/Speakers";
+import Earphones from "@/views/Earphones";
+import X99 from "@/views/X99";
+import X991 from "@/views/X991";
+import X59 from "@/views/X59";
+import ZX9 from "@/views/ZX9";
+import ZX7 from "@/views/ZX7";
+import YX1 from "@/views/YX1";
 
 Vue.use(Router)
 
@@ -29,37 +37,82 @@ const router = new Router({
       }
     },
     {
-      path: '/check-login',
-      name: 'check-login',
-      component: CheckLogin,
+      path: '/headphones',
+      name: 'headphones',
+      component: Headphones,
       meta: {
         authNotRequired: true
       }
     },
     {
-      path: '/login',
-      name: 'login',
-      component: () =>
-        import(/* webpackChunkName: "client-chunk-login" */ '@/views/Login.vue'),
+      path: '/xx99-mark-ii-headphones',
+      name: 'product-page',
+      component: X99,
       meta: {
         authNotRequired: true
       }
     },
     {
-      path: '/products',
-      name: 'products',
-      component: () =>
-        import(/* webpackChunkName: "client-chunk-products" */ '@/views/Products.vue')
+      path: '/xx99-mark-i-headphones',
+      name: 'product-page',
+      component: X991,
+      meta: {
+        authNotRequired: true
+      }
     },
     {
-      path: '/products/:id',
-      name: 'product',
-      props: true,
-      component: () =>
-        import(/* webpackChunkName: "client-chunk-product-details" */ '@/views/Product.vue')
+      path: '/xx59-headphones',
+      name: 'product-page',
+      component: X59,
+      meta: {
+        authNotRequired: true
+      }
+    },
+    {
+      path: '/speakers',
+      name: 'speakers',
+      component: Speakers,
+      meta: {
+        authNotRequired: true
+      }
+    },
+    {
+      path: '/zx9-speaker',
+      name: 'product-page',
+      component: ZX9,
+      meta: {
+        authNotRequired: true
+      }
+    },
+    {
+      path: '/zx7-speaker',
+      name: 'product-page',
+      component: ZX7,
+      meta: {
+        authNotRequired: true
+      }
+    },
+    {
+      path: '/earphones',
+      name: 'earphones',
+      component: Earphones,
+      meta: {
+        authNotRequired: true
+      },
+    },
+    {
+      path: '/yx1-earphones',
+      name: 'product-page',
+      component: YX1,
+      meta: {
+        authNotRequired: true
+      }
     },
     { path: '*', redirect: '/home' }
-  ]
+  ],
+  scrollBehavior () {
+    return { behavior: 'smooth', x: 0, y: 0 }
+  }
 })
 
 /**

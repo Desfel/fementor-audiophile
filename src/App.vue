@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="{'is-open': isBurgerOpen}">
+  <div id="app" :class="[{'is-open': isBurgerOpen}, routeName]">
     <nav-bar @triggerBurger="triggerBurger"></nav-bar>
     <div class="main-wrapper">
       <router-view />
@@ -30,7 +30,8 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      isBurgerOpen: false
+      isBurgerOpen: false,
+      routeName: null
     }
   },
   components: {FooterBar, NavBar, NewContentAvailableToastr, AppleAddToHomeScreenModal },
@@ -38,9 +39,20 @@ export default {
     ...mapGetters('app', ['newContentAvailable']),
     ...mapState('app', ['showAddToHomeScreenModalForApple', 'refreshingApp'])
   },
+  watch: {
+    $route: 'currentRoute'
+  },
+  created() {
+    this.routeName = this.$route.name
+  },
   methods: {
     triggerBurger(value) {
       this.isBurgerOpen = value
+    },
+    currentRoute() {
+      this.$nextTick(() => {
+        this.routeName = this.$route.name
+      })
     }
   }
 }
@@ -48,6 +60,11 @@ export default {
 
 <style lang="scss">
 @import '@/theme/variables.scss';
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
 
@@ -132,6 +149,27 @@ body {
       z-index: 9;
     }
 
+    &.product-page {
+      .navbar {
+        @media (min-width: 1025px) {
+          position: relative;
+          background: $black;
+          width: 100%;
+          max-width: 100%;
+          padding-left: 40px;
+          padding-right: 40px;
+        }
+
+        .navbar-wrapper {
+          @media (min-width: 1025px) {
+            width: 100%;
+            max-width: 1110px;
+            margin: auto;
+          }
+        }
+      }
+    }
+
     &.is-open {
       &:before {
         opacity: 0.4;
@@ -160,6 +198,11 @@ body {
     .main-wrapper {
       .page-wrapper {
         margin: auto;
+        padding-bottom: 200px;
+
+        @media (max-width: 1024px) {
+          padding-bottom: 120px;
+        }
       }
     }
 
@@ -183,6 +226,37 @@ body {
 
       @media (max-width: 1024px) {
         max-width: 100%;
+      }
+    }
+
+    .number-field {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 15px;
+      font-weight: bold;
+      font-size: 13px;
+      line-height: 18px;
+      text-align: center;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: $color3;
+      color: $black;
+
+      .subtract-item,
+      .add-item {
+        cursor: pointer;
+        transition: color .3s ease-in-out;
+
+        &:hover {
+          color: $color1;
+        }
+
+        &.is-disabled {
+          opacity: 0.25;
+          pointer-events: none;
+        }
       }
     }
   }
