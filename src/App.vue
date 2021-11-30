@@ -1,9 +1,10 @@
 <template>
-  <div id="app">
-    <nav-bar></nav-bar>
+  <div id="app" :class="{'is-open': isBurgerOpen}">
+    <nav-bar @triggerBurger="triggerBurger"></nav-bar>
     <div class="main-wrapper">
       <router-view />
     </div>
+    <footer-bar></footer-bar>
 
     <new-content-available-toastr
       v-if="newContentAvailable"
@@ -21,39 +22,122 @@
 </template>
 <script>
 import NavBar from '@/components/NavBar'
+import FooterBar from '@/components/FooterBar'
 import NewContentAvailableToastr from '@/components/NewContentAvailableToastr'
 import AppleAddToHomeScreenModal from '@/components/AppleAddToHomeScreenModal'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-  components: { NavBar, NewContentAvailableToastr, AppleAddToHomeScreenModal },
+  data() {
+    return {
+      isBurgerOpen: false
+    }
+  },
+  components: {FooterBar, NavBar, NewContentAvailableToastr, AppleAddToHomeScreenModal },
   computed: {
     ...mapGetters('app', ['newContentAvailable']),
     ...mapState('app', ['showAddToHomeScreenModalForApple', 'refreshingApp'])
   },
-  methods: mapActions('app', [
-    'closeAddToHomeScreenModalForApple',
-    'serviceWorkerSkipWaiting'
-  ])
+  methods: {
+    triggerBurger(value) {
+      this.isBurgerOpen = value
+    }
+  }
 }
 </script>
 
 <style lang="scss">
+@import '@/theme/variables.scss';
 body {
   margin: 0;
 
+  * {
+    box-sizing: border-box;
+  }
+
+  img {
+    vertical-align: middle;
+  }
+
+  h1,
+  h2,
+  p,
   a {
-    font-weight: 500;
+    font-family: $textFont;
+    margin: 0;
+  }
+
+  a {
     text-decoration: none;
   }
 
+  .site-btn {
+    display: inline-block;
+    padding: 15px 30px;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: $white;
+    background: $color1;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+      background: $color5;
+    }
+
+    &.is-light {
+      border: 1px solid $black;
+      background: transparent;
+      color: $black;
+
+      &:hover {
+        color: $white;
+        background: $black;
+      }
+    }
+
+    &.is-dark {
+      background: $black;
+      color: $white;
+
+      &:hover {
+        background: $color6;
+      }
+    }
+  }
+
   #app {
+    position: relative;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
       Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: 16px;
     color: #2c3e50;
+
+    &:before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: $black;
+      pointer-events: none;
+      transition: opacity 0.3s ease-in-out;
+      opacity: 0;
+      z-index: 9;
+    }
+
+    &.is-open {
+      &:before {
+        opacity: 0.4;
+        pointer-events: auto;
+      }
+    }
 
     .new-content-available-toastr {
       position: absolute;
@@ -74,16 +158,31 @@ body {
     }
 
     .main-wrapper {
-      margin-top: 3.6rem;
-      padding: 20px;
-
       .page-wrapper {
-        width: 60%;
         margin: auto;
+      }
+    }
 
-        @media screen and (max-width: 1000px) {
-          width: 100%;
-        }
+    .parent-container {
+      padding: 0 60px;
+
+      @media (max-width: 1024px) {
+        max-width: 100%;
+        padding: 0 40px;
+      }
+
+      @media (max-width: 767px) {
+        padding: 0 24px;
+      }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1110px;
+      margin: auto;
+
+      @media (max-width: 1024px) {
+        max-width: 100%;
       }
     }
   }
