@@ -1,6 +1,7 @@
 <template>
-  <div id="app" :class="[{'is-open': isBurgerOpen}, routeName]">
-    <nav-bar @triggerBurger="triggerBurger"></nav-bar>
+  <div id="app" @triggerCart="triggerCart" :class="[{'is-open': (isBurgerOpen || isCartOpen || popupIsOpen)}, routeName]">
+    <div v-if="(isBurgerOpen || isCartOpen || popupIsOpen)" class="overlay" @click="closePopup"></div>
+    <nav-bar @triggerBurger="triggerBurger" @triggerCart="triggerCart"></nav-bar>
     <div class="main-wrapper">
       <router-view />
     </div>
@@ -30,8 +31,14 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   data() {
     return {
+      popupIsOpen: false,
       isBurgerOpen: false,
-      routeName: null
+      isCartOpen: false,
+      routeName: null,
+      totalCartPrice: 0,
+      cartArray: [],
+      taxTotal: 0,
+      grandTotal: 0
     }
   },
   components: {FooterBar, NavBar, NewContentAvailableToastr, AppleAddToHomeScreenModal },
@@ -48,11 +55,41 @@ export default {
   methods: {
     triggerBurger(value) {
       this.isBurgerOpen = value
+      this.isCartOpen = false
+    },
+    triggerCart(value) {
+      this.isCartOpen = value
+      this.isBurgerOpen = false
     },
     currentRoute() {
       this.$nextTick(() => {
         this.routeName = this.$route.name
       })
+    },
+    closePopup() {
+      this.isBurgerOpen = false
+      this.isCartOpen = false
+    },
+    calculateTotalPrice() {
+      let totalPrice = 0
+
+      this.cartArray.forEach(product => {
+        totalPrice += product.price * product.qty
+      })
+
+      this.totalCartPrice = totalPrice
+      this.taxTotal = totalPrice * 0.2
+      this.grandTotal = totalPrice + this.taxTotal + 50
+
+      if(this.cartArray.length > 0) {
+        this.totalCartPrice = this.totalCartPrice.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
+        this.taxTotal = this.taxTotal.toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
+        this.grandTotal = this.grandTotal.toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
+      } else {
+        this.totalCartPrice = 0
+        this.taxTotal = 0
+        this.grandTotal = 0
+      }
     }
   }
 }
@@ -134,8 +171,7 @@ body {
     font-size: 16px;
     color: #2c3e50;
 
-    &:before {
-      content: '';
+    .overlay {
       position: fixed;
       top: 0;
       left: 0;
@@ -171,7 +207,7 @@ body {
     }
 
     &.is-open {
-      &:before {
+      .overlay {
         opacity: 0.4;
         pointer-events: auto;
       }
@@ -228,13 +264,30 @@ body {
         max-width: 100%;
       }
     }
+  }
 
-    .number-field {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+  .number-field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: $color3;
+    color: $black;
+
+    span {
+      user-select: none;
+    }
+
+    input {
+      display: inline-block;
       width: 100%;
-      padding: 15px;
       font-weight: bold;
       font-size: 13px;
       line-height: 18px;
@@ -243,20 +296,25 @@ body {
       text-transform: uppercase;
       background: $color3;
       color: $black;
+      background: transparent;
+      border: none;
+      outline: 0;
+      pointer-events: none;
+      user-select: none;
+    }
 
-      .subtract-item,
-      .add-item {
-        cursor: pointer;
-        transition: color .3s ease-in-out;
+    .subtract-item,
+    .add-item {
+      cursor: pointer;
+      transition: color .3s ease-in-out;
 
-        &:hover {
-          color: $color1;
-        }
+      &:hover {
+        color: $color1;
+      }
 
-        &.is-disabled {
-          opacity: 0.25;
-          pointer-events: none;
-        }
+      &.is-disabled {
+        opacity: 0.25;
+        pointer-events: none;
       }
     }
   }

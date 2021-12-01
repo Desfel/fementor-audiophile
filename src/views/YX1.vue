@@ -21,11 +21,11 @@
 
             <div class="input-container">
               <div class="number-field">
-                <span class="subtract-item is-disabled">-</span>
-                <span class="count">1</span>
-                <span class="add-item">+</span>
+                <span class="subtract-item" :class="{'is-disabled': itemCount <= 1}" @click="decreaseItem" >-</span>
+                <input class="count" v-model="itemCount" />
+                <span class="add-item" @click="incrementItem">+</span>
               </div>
-              <button type="submit" class="site-btn" @submit.prevent>Add to cart</button>
+              <button type="submit" class="site-btn" @click="addToCart">Add to cart</button>
             </div>
           </div>
         </div>
@@ -114,11 +114,46 @@ export default {
         name: 'YX1 WIRELESS EARPHONES',
         shortname: 'YX1',
         price: 599,
-        cartImg: '../img/cart/image-yx1-earphoens.jpg'
+        cartImg: '../img/cart/image-yx1-earphones.jpg',
+        qty: 0
+      },
+      itemCount: 1
+    }
+  },
+  methods: {
+    addToCart() {
+      const productArray = this.currentProduct
+      productArray.qty += this.itemCount
+      const rootCart = this.$parent.cartArray
+      const { currentProduct } = this
+      let itemExists = false
+
+      rootCart.forEach(product => {
+        if (itemExists === false) {
+          if (product.shortname === currentProduct.shortname) {
+            itemExists = true
+            product.qty = productArray.qty
+          }
+        }
+      })
+
+      if (!itemExists) {
+        productArray.qty = this.itemCount
+        rootCart.push(productArray)
+      }
+      this.$parent.triggerCart(true)
+      this.$parent.calculateTotalPrice()
+    },
+    incrementItem() {
+      this.itemCount = this.itemCount + 1
+    },
+    decreaseItem() {
+      if(this.itemCount > 1) {
+        this.itemCount = this.itemCount - 1
       }
     }
   },
-  name: "YX1 WIRELESS EARPHONES",
+  name: "YX1WIRELESSEARPHONES",
   components: {BestGear, CategoryNav},
 }
 </script>
@@ -408,7 +443,7 @@ export default {
       justify-content: center;
     }
 
-    @media (max-width: 1024px) {
+    @media (max-width: 767px) {
       flex-direction: column;
     }
 

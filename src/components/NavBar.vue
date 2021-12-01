@@ -1,9 +1,9 @@
 <template>
   <header class="navbar">
     <div class="navbar-wrapper">
-    <span class="burger-menu-icon" @click="openBurger">
-      <svg width="16" height="15" xmlns="http://www.w3.org/2000/svg"><g fill="#FFF" fill-rule="evenodd"><path d="M0 0h16v3H0zM0 6h16v3H0zM0 12h16v3H0z"/></g></svg>
-    </span>
+      <span class="burger-menu-icon" @click="openBurger">
+        <svg width="16" height="15" xmlns="http://www.w3.org/2000/svg"><g fill="#FFF" fill-rule="evenodd"><path d="M0 0h16v3H0zM0 6h16v3H0zM0 12h16v3H0z"/></g></svg>
+      </span>
 
       <router-link to="/home">
         <img class="logo" src="@/assets/img/shared/desktop/logo.svg" alt="logo-audiophile" />
@@ -17,13 +17,13 @@
         </nav>
       </div>
 
-      <span class="cart-icon">
-      <svg width="23" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M8.625 15.833c1.132 0 2.054.935 2.054 2.084 0 1.148-.922 2.083-2.054 2.083-1.132 0-2.054-.935-2.054-2.083 0-1.15.922-2.084 2.054-2.084zm9.857 0c1.132 0 2.054.935 2.054 2.084 0 1.148-.922 2.083-2.054 2.083-1.132 0-2.053-.935-2.053-2.083 0-1.15.92-2.084 2.053-2.084zm-9.857 1.39a.69.69 0 00-.685.694.69.69 0 00.685.694.69.69 0 00.685-.694.69.69 0 00-.685-.695zm9.857 0a.69.69 0 00-.684.694.69.69 0 00.684.694.69.69 0 00.685-.694.69.69 0 00-.685-.695zM4.717 0c.316 0 .59.215.658.517l.481 2.122h16.47a.68.68 0 01.538.262c.127.166.168.38.11.579l-2.695 9.236a.672.672 0 01-.648.478H7.41a.667.667 0 00-.673.66c0 .364.303.66.674.66h12.219c.372 0 .674.295.674.66 0 .364-.302.66-.674.66H7.412c-1.115 0-2.021-.889-2.021-1.98 0-.812.502-1.511 1.218-1.816L4.176 1.32H.674A.667.667 0 010 .66C0 .296.302 0 .674 0zm16.716 3.958H6.156l1.797 7.917h11.17l2.31-7.917z" fill="#FFF" fill-rule="nonzero"/></svg>
-    </span>
+      <span class="cart-icon" @click="openCart">
+        <svg width="23" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M8.625 15.833c1.132 0 2.054.935 2.054 2.084 0 1.148-.922 2.083-2.054 2.083-1.132 0-2.054-.935-2.054-2.083 0-1.15.922-2.084 2.054-2.084zm9.857 0c1.132 0 2.054.935 2.054 2.084 0 1.148-.922 2.083-2.054 2.083-1.132 0-2.053-.935-2.053-2.083 0-1.15.92-2.084 2.053-2.084zm-9.857 1.39a.69.69 0 00-.685.694.69.69 0 00.685.694.69.69 0 00.685-.694.69.69 0 00-.685-.695zm9.857 0a.69.69 0 00-.684.694.69.69 0 00.684.694.69.69 0 00.685-.694.69.69 0 00-.685-.695zM4.717 0c.316 0 .59.215.658.517l.481 2.122h16.47a.68.68 0 01.538.262c.127.166.168.38.11.579l-2.695 9.236a.672.672 0 01-.648.478H7.41a.667.667 0 00-.673.66c0 .364.303.66.674.66h12.219c.372 0 .674.295.674.66 0 .364-.302.66-.674.66H7.412c-1.115 0-2.021-.889-2.021-1.98 0-.812.502-1.511 1.218-1.816L4.176 1.32H.674A.667.667 0 010 .66C0 .296.302 0 .674 0zm16.716 3.958H6.156l1.797 7.917h11.17l2.31-7.917z" fill="#FFF" fill-rule="nonzero"/></svg>
+      </span>
 
-      <div class="mobile-menu" :class="{'is-open': isBurgerOpen}">
+      <div class="mobile-menu" :class="{'is-open': this.$parent.isBurgerOpen}">
         <nav class="mobile-links">
-          <router-link class="mobile-link-wrapper" to="/headphones">
+          <router-link class="mobile-link-wrapper" to="/headphones" @click.native="openBurger">
             <div class="mobile-link-content">
               <img src="@/assets/img/shared/desktop/image-category-thumbnail-headphones.png" alt="Headphones" />
 
@@ -36,7 +36,7 @@
               </p>
             </div>
           </router-link>
-          <router-link class="mobile-link-wrapper" to="/speakers">
+          <router-link class="mobile-link-wrapper" to="/speakers" @click.native="openBurger">
             <div class="mobile-link-content">
               <img src="@/assets/img/shared/desktop/image-category-thumbnail-speakers.png" alt="Speakers" />
 
@@ -49,7 +49,7 @@
               </p>
             </div>
           </router-link>
-          <router-link class="mobile-link-wrapper" to="/earphones">
+          <router-link class="mobile-link-wrapper" to="/earphones" @click.native="openBurger">
             <div class="mobile-link-content">
               <img src="@/assets/img/shared/desktop/image-category-thumbnail-earphones.png" alt="Earphones" />
 
@@ -64,6 +64,40 @@
           </router-link>
         </nav>
       </div>
+
+      <div class="container cart-container" :class="{'is-open': this.$parent.isCartOpen}">
+        <div class="cart-wrapper">
+          <div class="cart-header">
+            <p class="cart-title">Cart ({{ this.$parent.cartArray.length }})</p>
+            <p class="remove-items" @click="clearCart">Remove all</p>
+          </div>
+
+          <div class="cart-products">
+            <div class="cart-product" v-for="(product, index) in this.$parent.cartArray" v-bind:key="index">
+              <div class="img-wrapper" :style="`background-image:url('${product.cartImg}');`"></div>
+              <div class="cart-product-content">
+                <p class="cart-product-title">{{ product.shortname }}</p>
+                <p class="cart-product-price">$ {{ product.price }}</p>
+              </div>
+
+              <div class="cart-input input-container">
+                <div class="number-field">
+                  <span class="subtract-item" @click="removeFromCart(product.shortname)">-</span>
+                  <input class="count" v-model="product.qty" />
+                  <span class="add-item" @click="addToCart(product.shortname)">+</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cart-total">
+            <p class="total-title">Total</p>
+            <p class="total-price">$ {{ this.$parent.totalCartPrice }}</p>
+          </div>
+
+          <router-link to="/checkout" class="site-btn" @click.native="closeModal" :class="{'is-disabled': $parent.cartArray.length === 0}">Checkout</router-link>
+        </div>
+      </div>
     </div>
   </header>
 </template>
@@ -74,7 +108,8 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      isBurgerOpen: false
+      isBurgerOpen: this.$parent.isBurgerOpen,
+      isCartOpen: this.$parent.isCartOpen
     }
   },
   computed: {
@@ -82,8 +117,56 @@ export default {
   },
   methods: {
     openBurger() {
-      this.isBurgerOpen = !this.isBurgerOpen
+      this.isBurgerOpen = !this.$parent.isBurgerOpen
+      this.$parent.isCartOpen = false
       this.$emit('triggerBurger', this.isBurgerOpen)
+    },
+    openCart() {
+      this.isCartOpen = !this.$parent.isCartOpen
+      this.$parent.isBurgerOpen = false
+      this.$emit('triggerCart', this.isCartOpen)
+    },
+    closeModal() {
+      this.$parent.isCartOpen = false
+      this.$parent.isBurgerOpen = false
+    },
+    clearCart() {
+      this.$parent.cartArray.length = 0
+      this.$parent.isCartOpen = false
+    },
+    addToCart(productCode) {
+      const rootCart = this.$parent.cartArray
+      let itemExists = false
+
+      rootCart.forEach(product => {
+        if (itemExists === false) {
+          if (product.shortname === productCode) {
+            itemExists = true
+            product.qty += 1
+          }
+        }
+      })
+
+      this.$parent.calculateTotalPrice()
+    },
+    removeFromCart(productCode) {
+      const rootCart = this.$parent.cartArray
+      let itemExists = false
+
+      rootCart.forEach(product => {
+        if (itemExists === false) {
+          if (product.shortname === productCode) {
+            itemExists = true
+            product.qty -= 1
+
+            if (product.qty === 0) {
+              rootCart.splice(rootCart.indexOf(product), 1)
+            }
+          }
+        }
+      })
+
+      this.$parent.calculateTotalPrice()
     }
   }
 }
@@ -289,6 +372,148 @@ export default {
         svg {
           margin-left: 13px;
         }
+      }
+    }
+  }
+
+  .cart-container {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease-in-out;
+    z-index: 10;
+
+    &.is-open {
+      pointer-events: auto;
+      opacity: 1;
+    }
+  }
+
+  .cart-wrapper {
+    position: absolute;
+    top: 80px;
+    right: 0;
+    width: 380px;
+    padding: 31px 33px;
+    background: $white;
+    border-radius: 8px;
+
+    @media (max-width: 1024px) {
+      right: 80px;
+    }
+
+    @media (max-width: 767px) {
+      padding: 32px 28px;
+    }
+
+    .cart-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 32px;
+
+      .cart-title {
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 25px;
+        letter-spacing: 1.28571px;
+        text-transform: uppercase;
+        color: $black;
+      }
+
+      .remove-items {
+        margin-left: auto;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 25px;
+        color: $black;
+        opacity: 0.5;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .cart-products {
+      .cart-product {
+        display: flex;
+        align-items: center;
+
+        &:not(:last-child) {
+          margin-bottom: 24px;
+        }
+
+        .img-wrapper {
+          flex-shrink: 0;
+          width: 64px;
+          height: 64px;
+          margin-right: 16px;
+          border-radius: 8px;
+          background-position: center;
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-color: $color3;
+        }
+
+        .cart-product-title {
+          font-weight: bold;
+          font-size: 15px;
+          line-height: 25px;
+          color: $black;
+        }
+
+        .cart-product-price {
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 25px;
+          color: $black;
+          opacity: 0.5;
+        }
+
+        .cart-input {
+          flex-grow: 1;
+          max-width: 96px;
+          margin-left: auto;
+
+          .number-field {
+            padding: 7px 11.5px;
+          }
+        }
+      }
+    }
+
+    .cart-total {
+      display: flex;
+      align-items: center;
+      margin-top: 32px;
+
+      .total-title {
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 25px;
+        color: $black;
+        text-transform: uppercase;
+        opacity: 0.5;
+      }
+
+      .total-price {
+        margin-left: auto;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 25px;
+        text-transform: uppercase;
+        color: $black;
+      }
+    }
+
+    .site-btn {
+      margin-top: 24px;
+      width: 100%;
+      text-align: center;
+
+      &.is-disabled {
+        pointer-events: none;
       }
     }
   }

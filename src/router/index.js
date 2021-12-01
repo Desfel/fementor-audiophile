@@ -13,6 +13,7 @@ import X59 from "@/views/X59";
 import ZX9 from "@/views/ZX9";
 import ZX7 from "@/views/ZX7";
 import YX1 from "@/views/YX1";
+import Checkout from "@/views/Checkout";
 
 Vue.use(Router)
 
@@ -98,12 +99,20 @@ const router = new Router({
       component: Earphones,
       meta: {
         authNotRequired: true
-      },
+      }
     },
     {
       path: '/yx1-earphones',
       name: 'product-page',
       component: YX1,
+      meta: {
+        authNotRequired: true
+      }
+    },
+    {
+      path: '/checkout',
+      name: 'product-page',
+      component: Checkout,
       meta: {
         authNotRequired: true
       }
